@@ -1,5 +1,22 @@
 import logoDark from "./logo-dark.svg";
 import logoLight from "./logo-light.svg";
+import { Button } from "~/components/ui/button"
+import type { Route } from "./+types/home"
+
+export function meta({}: Route.MetaArgs) {
+  return [
+    { title: "New React Router App" },
+    { name: "description", content: "Welcome to React Router!" },
+  ]
+}
+
+export default function Home() {
+  return (
+    <div className="flex flex-col items-center justify-center min-h-svh">
+      <Button>Click me</Button>
+    </div>
+  )
+}
 
 export function Welcome() {
   return (
@@ -21,24 +38,7 @@ export function Welcome() {
         </header>
         <div className="max-w-[300px] w-full space-y-6 px-4">
           <nav className="rounded-3xl border border-gray-200 p-6 dark:border-gray-700 space-y-4">
-            <p className="leading-6 text-gray-700 dark:text-gray-200 text-center">
-              What&apos;s next?
-            </p>
-            <ul>
-              {resources.map(({ href, text, icon }) => (
-                <li key={href}>
-                  <a
-                    className="group flex items-center gap-3 self-stretch p-3 leading-normal text-blue-700 hover:underline dark:text-blue-500"
-                    href={href}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    {icon}
-                    {text}
-                  </a>
-                </li>
-              ))}
-            </ul>
+          <Button variant="outline">Button</Button>
           </nav>
         </div>
       </div>
