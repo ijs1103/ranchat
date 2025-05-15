@@ -27,8 +27,7 @@ export default [
   layout("common/layouts/navigation-layout.tsx", { id: "authenticated" }, [
     route("/dashboard", "features/dashboard/pages/dashboard-page.tsx"),
     layout("common/layouts/private.layout.tsx", { id: "private-auth" }, [
-      // 로그인 상태에서만 접근 가능한 기타 라우트들
-      // route("/logout", "features/auth/pages/logout-page.tsx"),
+      route("/logout", "features/auth/pages/logout-page.tsx"),
     ]),
   ]),
 ] satisfies RouteConfig;
