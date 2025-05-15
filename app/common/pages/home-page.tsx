@@ -11,7 +11,7 @@ export function meta({}: Route.MetaArgs) {
 
 export default function HomePage() {
   return (
-    <div className="flex flex-col h-screen items-center justify-center bg-red-100">
+    <div className="flex flex-col h-screen items-center justify-center bg-gray-400">
       <h1>메인</h1>
       <Button variant="outline" className="bg-red-300">
         <Link to="/auth/login">시작하기</Link>
