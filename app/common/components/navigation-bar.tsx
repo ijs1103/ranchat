@@ -1,4 +1,13 @@
-import { CogIcon, HomeIcon, LogOutIcon, MenuIcon, Search } from "lucide-react";
+import {
+  CogIcon,
+  HomeIcon,
+  LogOutIcon,
+  MenuIcon,
+  MessagesSquare,
+  Search,
+  Settings,
+  UserRound,
+} from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router";
 
@@ -22,6 +31,8 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import ThemeSwitcher from "./theme-switcher";
 import LangSwitcher from "./lang-switcher";
+import { useIsMobile } from "../hooks/useMobile";
+import { cn } from "~/lib/utils";
 
 function UserMenu({
   name,
@@ -36,7 +47,7 @@ function UserMenu({
     <DropdownMenu>
       {/* Avatar as the dropdown trigger */}
       <DropdownMenuTrigger asChild>
-        <Avatar className="size-8 cursor-pointer rounded-lg">
+        <Avatar className="size-12 cursor-pointer rounded-lg">
           <AvatarImage src={avatarUrl ?? undefined} />
           <AvatarFallback>{name.slice(0, 2)}</AvatarFallback>
         </Avatar>
@@ -54,7 +65,7 @@ function UserMenu({
         {/* Dashboard link */}
         <DropdownMenuItem asChild>
           <SheetClose asChild>
-            <Link to="/dashboard" viewTransition>
+            <Link to="/home" viewTransition>
               <HomeIcon className="size-4" />
               Dashboard
             </Link>
@@ -174,64 +185,87 @@ export function NavigationBar({
 }) {
   // Get translation function for internationalization
   const { t } = useTranslation();
+  const isMobile = useIsMobile();
 
   return (
     <nav
       className={
-        "mx-auto flex h-16 w-full items-center justify-between border-b px-5 shadow-xs backdrop-blur-lg transition-opacity md:px-10"
+        "mx-auto flex h-16 w-full items-center justify-between border-b px-5 shadow-xs backdrop-blur-lg transition-opacity md:px-10 bg-background"
       }
     >
-      <div className="mx-auto flex h-full w-full max-w-screen-2xl items-center justify-between py-3">
+      <div className="mx-auto flex h-full w-full items-center justify-between py-3 relative">
         {/* Mobile menu trigger (hidden on desktop) */}
-        <SheetTrigger className="size-6">
-          <MenuIcon />
-        </SheetTrigger>
-        <SheetContent className="w-full" side="top">
+        {isMobile ? null : (
+          <SheetTrigger className="size-6">
+            <MenuIcon />
+          </SheetTrigger>
+        )}
+        <SheetContent
+          className={cn([
+            isMobile ? "hidden" : "w-[480px]",
+            "pt-12",
+            "mx-auto",
+          ])}
+          side={isMobile ? undefined : "top"}
+        >
           <SheetHeader>
-            <SheetClose asChild>
-              <Link to="/blog">Blog</Link>
-            </SheetClose>
-            <SheetClose asChild>
-              <Link to="/contact">Contact</Link>
-            </SheetClose>
-            <SheetClose asChild>
-              <Link to="/payments/checkout">Payments</Link>
-            </SheetClose>
-          </SheetHeader>
-          {loading ? (
-            <div className="flex items-center">
-              <div className="bg-muted-foreground h-4 w-24 animate-pulse rounded-full" />
-            </div>
-          ) : (
-            <SheetFooter>
-              {name ? (
-                <div className="grid grid-cols-3">
-                  <div className="col-span-2 flex w-full justify-between">
-                    <Actions />
-                  </div>
-                  <div className="flex justify-end">
+            {name ? (
+              <>
+                <div className="flex justify-between items-end pb-4">
+                  <div className="flex w-full">
                     <UserMenu name={name} email={email} avatarUrl={avatarUrl} />
                   </div>
-                </div>
-              ) : (
-                <div className="flex flex-col gap-5">
-                  <div className="flex justify-between">
+                  <div className="flex gap-2">
                     <Actions />
                   </div>
-                  <div className="grid grid-cols-2 gap-2">
-                    <AuthButtons />
-                  </div>
                 </div>
-              )}
-            </SheetFooter>
-          )}
+                <Separator />
+
+                <div className="flex flex-col gap-8 pt-8">
+                  <SheetClose asChild>
+                    <Link className="flex items-center gap-6" to="/blog">
+                      <UserRound />
+                      친구목록
+                    </Link>
+                  </SheetClose>
+                  <SheetClose asChild>
+                    <Link className="flex items-center gap-6" to="/contact">
+                      <MessagesSquare />
+                      대화기록
+                    </Link>
+                  </SheetClose>
+                  <SheetClose asChild>
+                    <Link
+                      className="flex items-center gap-6"
+                      to="/payments/checkout"
+                    >
+                      <Settings />
+                      설정
+                    </Link>
+                  </SheetClose>
+                </div>
+              </>
+            ) : (
+              <div className="flex flex-col gap-5">
+                <div className="flex justify-between">
+                  <Actions />
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  <AuthButtons />
+                </div>
+              </div>
+            )}
+          </SheetHeader>
         </SheetContent>
 
         {/* Application logo/title with link to home */}
-        <Link to="/">
+        <Link
+          to="/"
+          className={isMobile ? "absolute left-1/2 -translate-x-1/2" : ""}
+        >
           <h1 className="text-lg font-extrabold">{t("home.title")}</h1>
         </Link>
-        <Link to="/search">
+        <Link to="/search" className={isMobile ? "ml-auto" : ""}>
           <Search className="size-6" />
         </Link>
       </div>

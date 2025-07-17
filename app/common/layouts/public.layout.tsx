@@ -9,7 +9,7 @@ export async function loader({ request }: Route.LoaderArgs) {
     data: { user },
   } = await client.auth.getUser();
   if (user) {
-    throw redirect("/dashboard");
+    throw redirect("/home");
   }
 
   // Return an empty object to avoid the "Cannot read properties of undefined" error

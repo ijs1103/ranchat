@@ -13,13 +13,13 @@ import {
 
 export default function ThemeSwitcher() {
   const [theme, setTheme, metadata] = useTheme();
-  
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
         asChild
-        className="cursor-pointer"
-        data-testid="theme-switcher" 
+        className="cursor-pointer border-2 rounded-lg"
+        data-testid="theme-switcher"
       >
         <Button variant="ghost" size="icon">
           {metadata.definedBy === "SYSTEM" ? (
@@ -31,19 +31,19 @@ export default function ThemeSwitcher() {
           ) : null}
         </Button>
       </DropdownMenuTrigger>
-      
+
       <DropdownMenuContent align="end">
         {/* Light theme option */}
         <DropdownMenuItem onClick={() => setTheme(Theme.LIGHT)}>
           <SunIcon className="size-4" />
           Light
         </DropdownMenuItem>
-        
+
         {/* Dark theme option */}
         <DropdownMenuItem onClick={() => setTheme(Theme.DARK)}>
           <MoonIcon className="size-4" /> Dark
         </DropdownMenuItem>
-        
+
         {/* System theme option (follows OS preference) */}
         <DropdownMenuItem onClick={() => setTheme(null)}>
           <MonitorIcon className="size-4" /> System

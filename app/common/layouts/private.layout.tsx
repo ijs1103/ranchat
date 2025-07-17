@@ -1,10 +1,9 @@
-
 import { Outlet, redirect } from "react-router";
 import { makeSSRClient } from "~/supabase-client";
 import type { Route } from "./+types/private.layout";
 
 export async function loader({ request }: Route.LoaderArgs) {
-  const {client} = makeSSRClient(request);
+  const { client } = makeSSRClient(request);
   const {
     data: { user },
   } = await client.auth.getUser();

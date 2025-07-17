@@ -34,7 +34,7 @@ export const loader = async ({ params, request }: Route.LoaderArgs) => {
     // 프로필 존재 여부 확인
     await getProfile(client, { profile_id: user.id });
     // 프로필이 존재하면 메인 페이지로 리다이렉트
-    return redirect("/dashboard", { headers });
+    return redirect("/home", { headers });
   } catch (error: any) {
     return redirect("/auth/signup", { headers });
   }
