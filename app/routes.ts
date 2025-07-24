@@ -27,7 +27,8 @@ export default [
   layout("common/layouts/navigation-layout.tsx", { id: "authenticated" }, [
     route("/home", "features/home/pages/home-page.tsx"),
     route("/search", "features/search/pages/search-page.tsx"),
-    route("/chat", "features/chat/pages/chat-page.tsx"),
+    // route("/chat", "features/chat/pages/chat-page.tsx"),
+    route("/chat/:messageRoomId", "features/chat/pages/chat-page.tsx"),
     layout("common/layouts/private.layout.tsx", { id: "private-auth" }, [
       route("/logout", "features/auth/pages/logout-page.tsx"),
     ]),

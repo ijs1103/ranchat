@@ -1,9 +1,10 @@
 import { useTranslation } from "react-i18next";
 import { RainbowButton } from "~/common/components/ui/rainbow-button";
 import { redirect, useNavigate } from "react-router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { makeSSRClient, supabaseClient } from "~/supabase-client";
 import type { Route } from "./+types/home-page";
+import { toast } from "sonner";
 
 export async function loader({ request }: Route.LoaderArgs) {
   const { client } = makeSSRClient(request);
@@ -24,7 +25,6 @@ export default function HomePage({ loaderData }: Route.ComponentProps) {
   const { user } = loaderData;
   const navigate = useNavigate();
   const [isMatching, setIsMatching] = useState(false);
-  const [isWaiting, setIsWaiting] = useState(false);
 
   const handleMatch = async () => {
     setIsMatching(true);
@@ -41,13 +41,19 @@ export default function HomePage({ loaderData }: Route.ComponentProps) {
 
       // 3. 서버로부터 받은 결과에 따라 페이지 이동
       if (data && data.message_room_id) {
+        toast.success("채팅 상대를 찾았어요!");
         navigate(`/chat/${data.message_room_id}`);
       } else {
-        alert("매칭 대기열에 등록되었습니다. 잠시 후 다시 시도해주세요.");
+        toast("매칭 대기열에 등록되었어요. 잠시만 기다려주세요.");
+        //TODO: 매칭대기 로직 (대기중인 상태에서 상대방이 매칭되면 채팅방에 들어가져야함)
       }
     } catch (error) {
       console.log("매칭 실패:", error);
-      alert("매칭 중 오류가 발생했습니다.");
+      if (error instanceof Error) {
+        toast.error(`매칭 중 오류가 발생했습니다: ${error.message}`);
+      } else {
+        toast.error("매칭 중 알 수 없는 오류가 발생했습니다.");
+      }
     } finally {
       setIsMatching(false);
     }
@@ -62,8 +68,8 @@ export default function HomePage({ loaderData }: Route.ComponentProps) {
       {!isMatching ? (
         <RainbowButton
           onClick={() => {
-            //handleMatch();
-            navigate("/chat");
+            handleMatch();
+            //navigate("/chat");
           }}
           variant="outline"
           size={"lg"}
